@@ -1,0 +1,19 @@
+FROM ubuntu:20.04
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y apache2 php git curl && \
+    apt-get clean
+
+# Borrar contenido por defecto de Apache
+RUN rm -rf /var/www/html/*
+
+# Clonar la aplicación PHP
+RUN git clone https://github.com/heroku/php-getting-started.git /var/www/html/
+
+# Dar permisos adecuados
+RUN chown -R www-data:www-data /var/www/html
+
+EXPOSE 80
+
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
